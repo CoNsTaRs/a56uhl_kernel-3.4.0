@@ -1,0 +1,8 @@
+&soc {
+        hall_ak8789 {
+                compatible = "hall_sensor_r2,ak8789";
+                hall,att_used = <2>;
+                hall,att_gpio = <&msmgpio 64 0>;
+                hall,att_gpio_s = <&msmgpio 9 0>;
+        };
+};

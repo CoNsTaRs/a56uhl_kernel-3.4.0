@@ -1,0 +1,147 @@
+/* This platform 8x26 doesn't support pinctrl */
+/*
+shub_boot_sel:shub_boot_sel {
+	//qcom,pins = <&gp 16>;
+	//qcom,num-grp-pins = <1>;
+	//qcom,pin-func = <0>;
+	label = "shub_boot_sel";
+	shub_boot_sel_status:shub_boot_sel_status{
+		//drive-strength = <2>;
+		//bias-disable;
+	};
+};
+
+mcugpio_int:mcugpio_int {
+	qcom,pins = <&gp 45>, <&gp 44>;
+	qcom,num-grp-pins = <2>;
+	qcom,pin-func = <0>;
+	label = "mcugpio";
+	mcu_init: mcu_init {
+		drive-strength = <2>;
+		bias-disable;
+	};
+};
+
+cpu2mcu_int:cpu2mcu_int {
+	//qcom,pins = <&gp 98>;
+	//qcom,num-grp-pins = <1>;
+	//qcom,pin-func = <0>;
+	label = "cpu2mcu_int";
+	cpu2mcu_int_status:cpu2mcu_int_status {
+		//drive-strength = <2>;
+		//bias-disable;
+	};
+};
+
+shub_rst:shub_rst {
+	qcom,pins = <&gp 99>;
+	qcom,num-grp-pins = <1>;
+	qcom,pin-func = <0>;
+	label = "shub_rst";
+	shub_rst_status:shub_rst_status {
+		drive-strength = <2>;
+		bias-disable;
+	};
+};
+
+&shub_boot_sel {
+	qcom,pins = <&gp 16>;
+	qcom,num-grp-pins = <1>;
+	qcom,pin-func = <0>;
+};
+
+&shub_boot_sel_status {
+	drive-strength = <2>;
+	bias-disable;
+};
+
+&mcugpio_int {
+	qcom,pins = <&gp 45>, <&gp 44>;
+	qcom,num-grp-pins = <2>;
+	qcom,pin-func = <0>;
+};
+
+&mcu_init {
+	drive-strength = <2>;
+	bias-disable;
+	input-enable;
+};
+
+&cpu2mcu_int {
+	qcom,pins = <&gp 98>;
+	qcom,num-grp-pins = <1>;
+	qcom,pin-func = <0>;
+};
+
+&cpu2mcu_int_status {
+	drive-strength = <2>;
+	bias-disable;
+};
+
+&shub_rst {
+	qcom,pins = <&gp 99>;
+	qcom,num-grp-pins = <1>;
+	qcom,pin-func = <0>;
+};
+
+&shub_rst_status {
+	drive-strength = <2>;
+	bias-disable;
+};
+*/
+
+&i2c_2 {
+	htc_mcu@72 {
+			compatible = "htc_mcu";
+			reg = <0x72>;
+//			vdd-supply = <&pm8950_l6>;
+			interrupt-parent = <&msmgpio>;
+			interrupts = <63 0x0>;
+			mcu,intr-gpio  = <&msmgpio 63 0>;
+			mcu,gs_chip_layout = <1>;
+			mcu,acceleration_axes = <7>;
+			mcu,magnetic_axes = <7>;
+			mcu,gyro_axes = <7>;
+			mcu,Cpu_wake_mcu-gpio = <&msmgpio 109 0>;
+			mcu,Reset-gpio = <&pm8226_gpios 6 0>;
+			mcu,Chip_mode-gpio = <&pm8226_gpios 2 0>;
+			mcu,mcu_status-gpio = <&msmgpio 66 0>;
+			mcu,als_steps = <10>;
+			mcu,als_levels = <14 35 60 260 549 3632 5424 9392 23757 65535>;
+			mcu,als_leveltolux = <0 4 20 45 75 575 1250 2100 3850 13915>;
+			mcu,als_goldl = <0x74>;
+			mcu,als_goldh = <0x0D>;
+			mcu,ps_thd_add = <0x32>;
+			mcu,ps_thd_fixed = <0x15>;
+//			pinctrl-names = "mcu_gpio_init";
+//			pinctrl-0 = <&shub_rst_status &mcu_init>;
+			touch_enable = <1>;
+			vibrate_ms = <20>;
+	};
+
+	htc_mcu_flash@39 {
+			compatible = "htc_mcu_flash";
+			reg = <0x39>;
+	};
+
+	htc_mcu_dload@02 {
+			compatible = "htc_mcu_dload";
+			reg = <0x02>;
+	};
+};
+
+&i2c_6 {
+	lp5521@32 {
+			compatible = "LP5521-VK_LED";
+			reg = <0x32>;
+			lp5521,lp5521_en = <&msmgpio 114 0x00>;
+			lp5521,tp_3v3_en = <&msmgpio 10 0x00>;
+			lp5521,num_leds = <1>;
+			//pinctrl-names = "lp5521_init";
+			//pinctrl-0 = <&lp5521_init>;
+			lp5521,current_param = <60>;
+			vk-pwm-array = [00 50 80 80 FF 30 30 30 30 30 30];
+			vk-black-pwm-array = [00 20 70 70 70 70 70 20 20 20 20];
+			vk-white-pwm-array = [00 50 80 80 FF 30 30 30 30 30 30];
+	};
+};
